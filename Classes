@@ -1,0 +1,40 @@
+package o1.legal
+
+
+abstract class Entity(name: String) extends AnyRef {
+  
+  def contact: String
+  def kind: String
+  
+  override def toString = {
+    this.name + " (" + this.kind + ")"
+  }
+  
+}
+
+////
+
+package o1.legal
+
+class NatrualPerson(val personID: String, val name: String) extends Entity(name)  {
+  
+  def kind = "human"
+  
+}
+
+class FullCapacityPerson(personID: String, name: String) extends Entity(name) {
+  
+  def contact: FullCapacityPerson
+  
+}
+
+// TODO: define classes NaturalPerson, FullCapacityPerson, and ReducedCapacityPerson
+
+////
+
+
+package o1.legal
+
+class CourtCase(plaintiff: Entity, defendant:Entity) = {
+  
+}
