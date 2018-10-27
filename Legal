@@ -1,0 +1,103 @@
+package o1.legal
+
+
+abstract class Entity(val name: String) extends AnyRef {
+  
+
+  def contact: NaturalPerson
+  def kind: String
+  
+  override def toString = {
+    this.name + " (" + this.kind + ")"
+  }
+  
+}
+
+package o1.legal
+
+class CourtCase(plaintiff: Entity, defendant:Entity) {
+  
+}
+
+package o1.legal
+
+
+// TODO: define classes JuridicalPerson, HumanOrganization, GeographicalFeature, and Group.
+
+abstract class JuridicalPerson(name: String) extends Entity(name)
+
+
+abstract class HumanOrganization(name: String, contact: NaturalPerson) extends JuridicalPerson(name) {
+  def kind: String
+  
+}
+  
+class GeographicalFeature(name: String, val kind: String, representative: Entity) extends JuridicalPerson(name) {
+  
+  def contact = this.representative.contact
+  
+}
+
+class Group(val members: Vector[Entity]) extends JuridicalPerson("group") {
+  
+  def contact = this.members(0).contact
+  
+  def kind = "group of " + members.length.toString() + " led by " + this.members(0).name
+  
+  val leader = this.members(0).name
+  
+  
+  
+}
+
+
+package o1.legal
+
+abstract class NaturalPerson(val personID: String, name: String) extends Entity(name)  {
+  
+  def kind = "human"
+  def contact: NaturalPerson
+  
+}
+
+class FullCapacityPerson(personID: String, name: String) extends NaturalPerson(personID,name) {
+  
+  def contact = this  
+  override def kind = super.kind + "in full capacity"
+
+}
+
+class ReducedCapacityPerson(personID: String, name: String, restriction: Restriction, guardian: FullCapacityPerson) extends NaturalPerson(personID,name) {
+  
+  def contact = this.guardian
+  override def kind = super.kind + "with " + this.restriction
+}
+
+
+
+package o1.legal
+
+
+/** A `Restriction` is a reason why a [[ReducedCapacityPerson]] cannot function independently as a legal entity. */
+abstract class Restriction(val description: String) {
+  override def toString = s"capacity reduced due to $description"  
+}
+
+
+/** This singleton object represents the [[Restriction]] of being mentally or physically unable to   
+  * function independently as a legal [[Entity]]. It has the `description` "mental and/or physical condition". */ 
+object Illness extends Restriction("mental and/or physical condition") 
+
+
+// TODO: define object Underage. Its description should be simply "age". 
+
+object Underage extends Restriction("age") {
+  
+}
+
+
+
+// TODO: define classes NaturalPerson, FullCapacityPerson, and ReducedCapacityPerson
+
+
+
